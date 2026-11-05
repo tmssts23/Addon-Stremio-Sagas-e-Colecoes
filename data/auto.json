@@ -1,0 +1,269 @@
+{
+  "updated": "2026-11-04",
+  "sagas": {
+    "marvel": [
+      {
+        "id": "tt23112594",
+        "type": "series",
+        "name": "VisionQuest",
+        "year": 2026,
+        "animated": false
+      }
+    ],
+    "star-wars": [
+      {
+        "id": "tt36594331",
+        "type": "series",
+        "name": "Star Wars: Maul - Shadow Lord",
+        "year": 2026,
+        "animated": true
+      }
+    ],
+    "despicable-me": [
+      {
+        "id": "tt32890033",
+        "type": "movie",
+        "name": "Minions & Monsters",
+        "year": 2026,
+        "animated": true
+      }
+    ],
+    "one-piece": [
+      {
+        "id": "tt41538904",
+        "type": "series",
+        "name": "Lego One Piece",
+        "year": 2026,
+        "animated": true
+      }
+    ],
+    "digimon": [
+      {
+        "id": "tt37499375",
+        "type": "series",
+        "name": "Digimon Beatbreak",
+        "year": 2025,
+        "animated": true
+      }
+    ],
+    "my-hero-academia": [
+      {
+        "id": "tt35636246",
+        "type": "series",
+        "name": "My Hero Academia: Vigilantes",
+        "year": 2025,
+        "animated": true
+      }
+    ],
+    "jujutsu-kaisen": [
+      {
+        "id": "tt38121182",
+        "type": "movie",
+        "name": "Jujutsu Kaisen: Execution",
+        "year": 2025,
+        "animated": true
+      }
+    ]
+  },
+  "upcoming": {
+    "marvel": [
+      {
+        "id": "tt21357150",
+        "type": "movie",
+        "name": "Avengers: Doomsday",
+        "year": 2026,
+        "date": "2026-12-17",
+        "animated": false,
+        "wd": [
+          "Q642878"
+        ]
+      },
+      {
+        "id": "tt21361444",
+        "type": "movie",
+        "name": "Avengers: Secret Wars",
+        "year": 2027,
+        "date": "2027-12-17",
+        "animated": false,
+        "wd": [
+          "Q642878"
+        ]
+      },
+      {
+        "id": "tt29347085",
+        "type": "movie",
+        "name": "Untitled X-Men Film",
+        "year": 2028,
+        "date": "2028-05-05",
+        "animated": false,
+        "wd": [
+          "Q642878"
+        ]
+      },
+      {
+        "id": "tt37884905",
+        "type": "movie",
+        "name": "Black Panther 3",
+        "year": 2028,
+        "date": "2028-12-15",
+        "animated": false,
+        "wd": [
+          "Q642878"
+        ]
+      }
+    ],
+    "star-wars": [
+      {
+        "id": "tt28069611",
+        "type": "movie",
+        "name": "Star Wars: Starfighter",
+        "year": 2027,
+        "date": "2027-05-28",
+        "animated": false
+      }
+    ],
+    "middle-earth": [
+      {
+        "id": "tt32328070",
+        "type": "movie",
+        "name": "The Lord of the Rings: The Hunt for Gollum",
+        "year": 2027,
+        "date": "2027-12-17",
+        "animated": false
+      }
+    ],
+    "monsterverse": [
+      {
+        "id": "tt32561550",
+        "type": "movie",
+        "name": "Godzilla x Kong: Supernova",
+        "year": 2027,
+        "date": "2027-03-26",
+        "animated": false
+      }
+    ],
+    "fast-and-furious": [
+      {
+        "id": "tt27550022",
+        "type": "movie",
+        "name": "Fast Forever",
+        "year": 2028,
+        "date": "2028-03-17",
+        "animated": false
+      }
+    ],
+    "dune": [
+      {
+        "id": "tt31378509",
+        "type": "movie",
+        "name": "Dune: Part Three",
+        "year": 2026,
+        "date": "2026-12-18",
+        "animated": false
+      }
+    ],
+    "avatar": [
+      {
+        "id": "tt3095356",
+        "type": "movie",
+        "name": "Avatar 4",
+        "year": 2029,
+        "date": "2029-12-21",
+        "animated": false
+      }
+    ],
+    "the-hunger-games": [
+      {
+        "id": "tt32558705",
+        "type": "movie",
+        "name": "The Hunger Games: Sunrise on the Reaping",
+        "year": 2026,
+        "date": "2026-11-20",
+        "animated": false
+      }
+    ],
+    "shrek": [
+      {
+        "id": "tt6113186",
+        "type": "movie",
+        "name": "Shrek 5",
+        "year": 2027,
+        "date": "2027-06-30",
+        "animated": true
+      }
+    ],
+    "frozen": [
+      {
+        "id": "tt26680923",
+        "type": "movie",
+        "name": "Frozen III",
+        "year": 2027,
+        "date": "2027-11-24",
+        "animated": true
+      }
+    ],
+    "ice-age": [
+      {
+        "id": "tt34512981",
+        "type": "movie",
+        "name": "Ice Age: Boiling Point",
+        "year": 2027,
+        "date": "2027-02-04",
+        "animated": true
+      }
+    ],
+    "the-incredibles": [
+      {
+        "id": "tt33088418",
+        "type": "movie",
+        "name": "Incredibles 3",
+        "year": 2028,
+        "date": "2028-06-16",
+        "animated": true
+      }
+    ],
+    "teenage-mutant-ninja-turtles": [
+      {
+        "id": "tt31512072",
+        "type": "movie",
+        "name": "Teenage Mutant Ninja Turtles: Mutant Mayhem 2",
+        "year": 2027,
+        "date": "2027-09-17",
+        "animated": true,
+        "wd": [
+          "Q136536453"
+        ]
+      }
+    ],
+    "pokemon": [
+      {
+        "id": "tt44925696",
+        "type": "movie",
+        "name": "Pokémon: Wild Card",
+        "year": 2027,
+        "date": "2027-01-01",
+        "animated": true
+      }
+    ],
+    "the-simpsons": [
+      {
+        "id": "tt38561132",
+        "type": "movie",
+        "name": "The New Simpsons Movie",
+        "year": 2027,
+        "date": "2027-09-03",
+        "animated": true
+      }
+    ],
+    "one-piece": [
+      {
+        "id": "tt30476502",
+        "type": "series",
+        "name": "THE ONE PIECE",
+        "year": 2027,
+        "date": "2027-02-01",
+        "animated": true
+      }
+    ]
+  }
+}

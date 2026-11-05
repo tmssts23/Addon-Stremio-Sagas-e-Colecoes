@@ -1,0 +1,16 @@
+{
+  "name": "stremio-sagas-colecoes",
+  "version": "1.5.0",
+  "description": "Addon de catalogos de sagas e colecoes para Stremio e Nuvio",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
+    "verify": "node tools/verify-ids.js",
+    "update": "node tools/update.js",
+    "popularity": "node tools/popularity.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
