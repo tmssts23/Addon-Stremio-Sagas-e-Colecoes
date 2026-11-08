@@ -27,6 +27,9 @@ const SINCE = '2025-01-01';
 // Próximas estreias: só as que têm data marcada até daqui a UPCOMING_YEARS anos.
 const UPCOMING_YEARS = 4;
 const UPCOMING_LIMIT = `${new Date().getUTCFullYear() + UPCOMING_YEARS}-12-31`;
+// Estreias de há menos de RECENT_DAYS dias ainda sem nota/episódios no IMDb continuam a ser mostradas.
+const RECENT_DAYS = 60;
+const RECENT_LIMIT = new Date(Date.now() - RECENT_DAYS * 86400000).toISOString().slice(0, 10);
 const DRY = process.argv.includes('--dry');
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -108,6 +111,7 @@ async function main() {
   const problems = [];
   const added = [];
   const soon = [];
+  const universeUpdates = [];
   const now = today();
 
   for (const saga of MANUAL) {
@@ -130,6 +134,15 @@ async function main() {
     for (const row of rows) {
       const imdbId = row.imdb.value;
       const type = row.kind.value;
+      // Só guarda as entidades que correspondem a algum universo conhecido.
+      const wd = (row.wd ? row.wd.value.split(' ') : []).filter((q) => UNIVERSE_QS.has(q));
+
+      // Títulos que já entraram: atualiza os universos, caso o Wikidata os tenha ligado entretanto.
+      const existing = autoItems.find((item) => item.id === imdbId);
+      if (existing && wd.length && wd.join(' ') !== (existing.wd || []).join(' ')) {
+        existing.wd = wd;
+        universeUpdates.push(`${saga.name}: ${existing.name} -> ${wd.join(', ')}`);
+      }
       if (known.has(imdbId) || exclude.has(imdbId)) continue;
       const wikidataDate = row.date ? row.date.value.slice(0, 10) : null;
       if (wikidataDate && wikidataDate < SINCE) continue;
@@ -143,12 +156,14 @@ async function main() {
       // A flag decide o separador onde o título aparece (lib/sagas.js).
       const genres = meta.genres || meta.genre || [];
       const animated = genres.length ? genres.includes('Animation') : row.anim.value === '1';
-      // Só guarda as entidades que correspondem a algum universo conhecido.
-      const wd = (row.wd ? row.wd.value.split(' ') : []).filter((q) => UNIVERSE_QS.has(q));
 
       if (!hasPremiered(meta, type, now)) {
-        // Próxima estreia: data marcada (Cinemeta ou Wikidata) no futuro, até UPCOMING_YEARS anos.
-        const date = [cinemetaDate, wikidataDate].filter((d) => d && d > now).sort()[0];
+        // Próxima estreia: data marcada (Cinemeta ou Wikidata) no futuro, até UPCOMING_YEARS anos. Se a data
+        // passou há pouco (RECENT_DAYS) mas ainda não há nota/episódios no IMDb, fica com essa data: a app já
+        // o mostra como estreado (lib/franchises.js) e entra de vez quando o IMDb o confirmar.
+        const future = [cinemetaDate, wikidataDate].filter((d) => d && d > now).sort()[0];
+        const recent = cinemetaDate && cinemetaDate <= now && cinemetaDate >= RECENT_LIMIT ? cinemetaDate : null;
+        const date = future || recent;
         if (!date || date > UPCOMING_LIMIT) continue;
         upcoming.push({ id: imdbId, type, name: meta.name, year: Number(date.slice(0, 4)), date, animated, ...(wd.length ? { wd } : {}) });
         continue;
@@ -175,9 +190,10 @@ async function main() {
   if (problems.length) console.log(`Avisos:\n${problems.join('\n')}\n`);
   console.log(added.length ? `Novos títulos (${added.length}):\n${added.join('\n')}` : 'Nenhum título novo.');
   console.log(soon.length ? `\nPróximas estreias (${soon.length}):\n${soon.join('\n')}` : '\nNenhuma próxima estreia.');
+  if (universeUpdates.length) console.log(`\nUniversos atualizados (${universeUpdates.length}):\n${universeUpdates.join('\n')}`);
 
   if (DRY) return console.log('\n(--dry: nada foi gravado)');
-  if (added.length) auto.updated = now;
+  if (added.length || universeUpdates.length) auto.updated = now;
   fs.writeFileSync(AUTO_FILE, `${JSON.stringify(auto, null, 2)}\n`);
   console.log('\nGravado em data/auto.json.');
 

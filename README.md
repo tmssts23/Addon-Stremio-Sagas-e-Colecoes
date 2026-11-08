@@ -11,7 +11,7 @@ Addon de catálogos para **Stremio** e **Nuvio** com 113 sagas e cerca de 900 t�
 - A divisão é automática, pela flag `'a'` de cada título (ver abaixo). `data/sagas.js` e `data/animacao.js` servem só para arrumar as sagas.
 - Escolhes a saga e no filtro escolhes a vista:
   - **Predefinida**: tudo, do mais antigo para o mais recente (ordem de lançamento)
-  - **Ordem cronológica**: pela ordem da história (só nas sagas onde muda alguma coisa)
+  - **Ordem cronológica**: pela ordem da história (só nas sagas onde muda alguma coisa e que não têm universos; nas que têm, ver "Universos")
   - **Filmes** e **Séries**
   - **Próximas estreias**: filmes e séries já anunciados, com a data de estreia (só nas sagas que têm). Saem da lista quando estreiam e passam para as outras vistas.
 - Conta como animação o que o IMDb classifica como "Animation", menos os filmes com atores em cena e personagens animadas por computador (Space Jam, Alvin, Tom & Jerry 2021), que ficam em "Sagas e Coleções". O `npm run verify` avisa quando a marcação de um título não bate com o IMDb (com exceções para estes híbridos).
@@ -21,7 +21,9 @@ Addon de catálogos para **Stremio** e **Nuvio** com 113 sagas e cerca de 900 t�
 
 ## Universos
 
-Muitas sagas têm vários universos (continuidades). Cada universo aparece como vista no filtro da saga, a seguir a Filmes e Séries, sempre que a saga tem títulos de mais do que um. Estão em `data/universes.js` (44 universos):
+Muitas sagas têm vários universos (continuidades). Nessas sagas, o filtro começa pelos universos, por ordem de importância: o primeiro é o que abre por defeito (ex.: o MCU na Marvel, o DCEU na DC, o cânone no Star Wars). Cada universo já mostra os títulos pela sua ordem cronológica, por isso estas sagas não têm a vista "Ordem cronológica" à parte. A seguir vêm **Todos** (a saga inteira por ordem de lançamento), Filmes, Séries e Próximas estreias.
+
+Os universos estão em `data/universes.js` (45). A ordem da lista é a importância, e cada universo pode ter a sua própria `chrono`:
 
 - **Marvel** (inclui o Homem-Aranha e os X-Men): Universo Cinematográfico Marvel (MCU), Marvel Netflix (Saga Defensores), Marvel Television (ABC e Hulu), X-Men (Fox), X-Men: A Série Animada, Homem-Aranha de Sam Raimi, O Fantástico Homem-Aranha, Universo Homem-Aranha da Sony, Aranhaverso, Blade (1998–2004), Quarteto Fantástico (Fox), Demolidor e Elektra (Fox), Ghost Rider (Sony)
 - **DC** (inclui o Batman): Universo Estendido DC (DCEU), Universo DC (DCU), Arrowverse, Universo Animado DC (DCAU), Trilogia O Cavaleiro das Trevas (Nolan), Batman de Burton e Schumacher, The Batman (Matt Reeves), Batman (1966), Superman de Christopher Reeve, Joker (Todd Phillips), Titãs e Doom Patrol (Terra-9), Teen Titans (animação), Watchmen
@@ -30,7 +32,7 @@ Muitas sagas têm vários universos (continuidades). Cada universo aparece como 
 - **Transformers**: Geração 1 (1984), Michael Bay, Bumblebee e O Despertar das Feras
 - **Tartarugas Ninja**: filmes 1990–2007, filmes 2014–2016, O Despertar das Tartarugas Ninja, Caos Mutante
 - **Planeta dos Macacos**: 1968–1973 e 2011–
-- **Duna** (Denis Villeneuve), **O Senhor dos Anéis** (Peter Jackson e Rankin/Bass), **Alien vs. Predador**, **A Múmia** (Stephen Sommers)
+- **Alien** (saga principal e Alien vs. Predador), **Duna** (Denis Villeneuve), **O Senhor dos Anéis** (Peter Jackson e Rankin/Bass), **A Múmia** (Stephen Sommers)
 
 As outras sagas são um universo só, por isso não têm estas vistas. Os títulos novos da atualização diária entram no universo certo pelas entidades do Wikidata (`wikidata` em cada universo).
 
@@ -82,6 +84,7 @@ Notas:
 - Na Predefinida, os títulos novos ficam no sítio certo pelo ano. Na ordem cronológica, ficam no fim até os pores em `chrono`.
 - Um título errado que entre sozinho: põe o ID IMDb em `exclude` dessa saga em `data/wikidata-sources.js`.
 - As próximas estreias (títulos com data de estreia marcada nos próximos 4 anos, no Cinemeta ou no Wikidata) são refeitas em cada atualização.
+- No dia da estreia, o título sai sozinho das Próximas estreias e entra na saga e no seu universo, sem esperar pela atualização. O universo vem do Wikidata ou, nas próximas estreias escritas à mão (`data/upcoming.js`), do campo `universes`. Se ainda não houver nota no IMDb, continua a aparecer como estreado durante 60 dias, até o IMDb o confirmar.
 - Ver primeiro sem gravar: `npm run update -- --dry`.
 
 **Todos os dias, sozinho:** com o addon num repositório do GitHub, o workflow `.github/workflows/update-catalogs.yml` corre todos os dias às 05:00 (UTC), confirma os IDs e grava as novidades (a Vercel volta a publicar sozinha). Não é preciso configurar nada no GitHub. As apps guardam os catálogos em cache 2 horas, por isso um título novo aparece normalmente no próprio dia. Também o podes correr à mão em Actions → "Atualizar catalogos" → *Run workflow*.

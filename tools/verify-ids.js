@@ -6,6 +6,7 @@
 const SAGAS = require('../lib/franchises');
 const { chronoItems } = require('../lib/views');
 const UNIVERSES = require('../data/universes.js');
+const MANUAL_UPCOMING = require('../data/upcoming.js');
 
 const CINEMETA = 'https://v3-cinemeta.strem.io';
 const CONCURRENCY = 8;
@@ -92,8 +93,23 @@ async function main() {
   }
 
   const catalogIds = new Set(SAGAS.flatMap((saga) => saga.items.map((item) => item.id)));
+  const catalogItems = [...new Map(SAGAS.flatMap((saga) => saga.items).map((item) => [item.id, item])).values()];
   for (const universe of UNIVERSES) {
     for (const id of universe.ids) if (!catalogIds.has(id)) problems.push(`Universo ${universe.name}: ${id} não está em nenhuma saga`);
+    const items = catalogItems.filter((item) => universe.ids.includes(item.id));
+    for (const name of chronoItems({ items, chrono: universe.chrono }).missing) {
+      problems.push(`Universo ${universe.name}: "${name}" em chrono não é nenhum título do universo`);
+    }
+  }
+
+  const universeKeys = new Set(UNIVERSES.map((universe) => universe.key));
+  for (const [slug, list] of Object.entries(MANUAL_UPCOMING)) {
+    if (!SAGAS.some((saga) => saga.slug === slug)) problems.push(`data/upcoming.js: a saga "${slug}" não existe`);
+    for (const item of list) {
+      for (const key of item.universes || []) {
+        if (!universeKeys.has(key)) problems.push(`data/upcoming.js: ${item.name} tem o universo "${key}", que não existe`);
+      }
+    }
   }
 
   let next = 0;

@@ -1,5 +1,9 @@
 // Universos (continuidades) dentro das sagas. Cada um aparece como vista no filtro das sagas onde tem
 // títulos, desde que não seja a saga inteira (ex.: na DC aparecem DCEU, DCU, Arrowverse…).
+// A ordem da lista é a importância: em cada saga, os universos aparecem por esta ordem, e o primeiro é o que
+// abre por defeito (ex.: o MCU na Marvel).
+// Dentro de cada universo, os títulos vão pela ordem cronológica: `chrono` do universo (se houver), senão a
+// `chrono` da saga, senão a ordem de lançamento. Nomes como em `chrono` das sagas ("Nome (ano)" desfaz empates).
 // ids: títulos do universo (IDs IMDb). wikidata: entidades do Wikidata (universo ou série) que o
 // `npm run update` usa para pôr os títulos novos no universo certo.
 // O nome em inglês aparece com a app em inglês; o namePt com a app em português.
@@ -105,6 +109,23 @@ module.exports = [
     name: 'X-Men (Fox)',
     namePt: 'X-Men (Fox)',
     wikidata: ['Q2006869'],
+    chrono: [
+      'X-Men: First Class',
+      'X-Men Origins: Wolverine',
+      'X-Men: Days of Future Past',
+      'X-Men: Apocalypse',
+      'X-Men: Dark Phoenix',
+      'The New Mutants',
+      'X-Men (2000)',
+      'X2: X-Men United',
+      'X-Men: The Last Stand',
+      'The Wolverine',
+      'Deadpool',
+      'Deadpool 2',
+      'Logan',
+      'Legion',
+      'The Gifted',
+    ],
     ids: [
       'tt0120903', // X-Men (2000)
       'tt0290334', // X2: X-Men United (2003)
@@ -124,12 +145,25 @@ module.exports = [
     ],
   },
   {
-    key: 'x-men-animated',
-    name: 'X-Men: The Animated Series',
-    namePt: 'X-Men: A Série Animada',
+    key: 'sony-spider-man-universe',
+    name: "Sony's Spider-Man Universe",
+    namePt: 'Universo Homem-Aranha da Sony',
+    wikidata: ['Q55537283'],
+    chrono: [
+      'Madame Web',
+      'Kraven the Hunter',
+      'Venom',
+      'Venom: Let There Be Carnage',
+      'Morbius',
+      'Venom: The Last Dance',
+    ],
     ids: [
-      'tt0103584', // X-Men: The Animated Series (1992)
-      'tt16026746', // X-Men '97 (2024)
+      'tt1270797', // Venom (2018)
+      'tt7097896', // Venom: Let There Be Carnage (2021)
+      'tt5108870', // Morbius (2022)
+      'tt11057302', // Madame Web (2024)
+      'tt16366836', // Venom: The Last Dance (2024)
+      'tt8790086', // Kraven the Hunter (2024)
     ],
   },
   {
@@ -154,20 +188,6 @@ module.exports = [
     ],
   },
   {
-    key: 'sony-spider-man-universe',
-    name: "Sony's Spider-Man Universe",
-    namePt: 'Universo Homem-Aranha da Sony',
-    wikidata: ['Q55537283'],
-    ids: [
-      'tt1270797', // Venom (2018)
-      'tt7097896', // Venom: Let There Be Carnage (2021)
-      'tt5108870', // Morbius (2022)
-      'tt11057302', // Madame Web (2024)
-      'tt16366836', // Venom: The Last Dance (2024)
-      'tt8790086', // Kraven the Hunter (2024)
-    ],
-  },
-  {
     key: 'spider-verse',
     name: 'Spider-Verse',
     namePt: 'Aranhaverso',
@@ -175,6 +195,15 @@ module.exports = [
     ids: [
       'tt4633694', // Spider-Man: Into the Spider-Verse (2018)
       'tt9362722', // Spider-Man: Across the Spider-Verse (2023)
+    ],
+  },
+  {
+    key: 'x-men-animated',
+    name: 'X-Men: The Animated Series',
+    namePt: 'X-Men: A Série Animada',
+    ids: [
+      'tt0103584', // X-Men: The Animated Series (1992)
+      'tt16026746', // X-Men '97 (2024)
     ],
   },
   {
@@ -220,6 +249,25 @@ module.exports = [
     name: 'DC Extended Universe (DCEU)',
     namePt: 'Universo Estendido DC (DCEU)',
     wikidata: ['Q18281265'],
+    chrono: [
+      'Wonder Woman (2017)',
+      'Wonder Woman 1984',
+      'Man of Steel',
+      'Batman v Superman: Dawn of Justice',
+      'Suicide Squad',
+      'Justice League (2017)',
+      "Zack Snyder's Justice League",
+      'Aquaman',
+      'Shazam!',
+      'Birds of Prey',
+      'The Suicide Squad',
+      'Peacemaker',
+      'Black Adam',
+      'Shazam! Fury of the Gods',
+      'The Flash (2023)',
+      'Blue Beetle',
+      'Aquaman and the Lost Kingdom',
+    ],
     ids: [
       'tt0770828', // Man of Steel (2013)
       'tt2975590', // Batman v Superman: Dawn of Justice (2016)
@@ -245,6 +293,14 @@ module.exports = [
     name: 'DC Universe (DCU)',
     namePt: 'Universo DC (DCU)',
     wikidata: ['Q116545465'],
+    chrono: [
+      'Creature Commandos',
+      'Superman (2025)',
+      'Peacemaker',
+      'Supergirl (2026)',
+      'Lanterns',
+      'Clayface',
+    ],
     ids: [
       'tt26545355', // Creature Commandos (2024)
       'tt5950044', // Superman (2025)
@@ -252,6 +308,26 @@ module.exports = [
       'tt8814476', // Supergirl (2026)
       'tt26545992', // Lanterns (2026)
       'tt34890576', // Clayface (2026)
+    ],
+  },
+  {
+    key: 'dark-knight-trilogy',
+    name: 'The Dark Knight Trilogy (Nolan)',
+    namePt: 'Trilogia O Cavaleiro das Trevas (Nolan)',
+    wikidata: ['Q12859908', 'Q69920250'],
+    ids: [
+      'tt0372784', // Batman Begins (2005)
+      'tt0468569', // The Dark Knight (2008)
+      'tt1345836', // The Dark Knight Rises (2012)
+    ],
+  },
+  {
+    key: 'batman-epic-crime-saga',
+    name: 'The Batman (Matt Reeves)',
+    namePt: 'The Batman (Matt Reeves)',
+    ids: [
+      'tt1877830', // The Batman (2022)
+      'tt15435876', // The Penguin (2024)
     ],
   },
   {
@@ -276,6 +352,17 @@ module.exports = [
     name: 'DC Animated Universe (DCAU)',
     namePt: 'Universo Animado DC (DCAU)',
     wikidata: ['Q900829'],
+    chrono: [
+      'Batman: The Animated Series',
+      'Batman: Mask of the Phantasm',
+      'Superman: The Animated Series',
+      'The New Batman Adventures',
+      'Static Shock',
+      'Justice League (2001)',
+      'Justice League Unlimited',
+      'Batman Beyond',
+      'Batman Beyond: Return of the Joker',
+    ],
     ids: [
       'tt0103359', // Batman: The Animated Series (1992)
       'tt0106364', // Batman: Mask of the Phantasm (1993)
@@ -289,17 +376,6 @@ module.exports = [
     ],
   },
   {
-    key: 'dark-knight-trilogy',
-    name: 'The Dark Knight Trilogy (Nolan)',
-    namePt: 'Trilogia O Cavaleiro das Trevas (Nolan)',
-    wikidata: ['Q12859908', 'Q69920250'],
-    ids: [
-      'tt0372784', // Batman Begins (2005)
-      'tt0468569', // The Dark Knight (2008)
-      'tt1345836', // The Dark Knight Rises (2012)
-    ],
-  },
-  {
     key: 'burton-schumacher-batman',
     name: 'Batman (Burton & Schumacher)',
     namePt: 'Batman de Burton e Schumacher',
@@ -309,25 +385,6 @@ module.exports = [
       'tt0103776', // Batman Returns (1992)
       'tt0112462', // Batman Forever (1995)
       'tt0118688', // Batman & Robin (1997)
-    ],
-  },
-  {
-    key: 'batman-epic-crime-saga',
-    name: 'The Batman (Matt Reeves)',
-    namePt: 'The Batman (Matt Reeves)',
-    ids: [
-      'tt1877830', // The Batman (2022)
-      'tt15435876', // The Penguin (2024)
-    ],
-  },
-  {
-    key: 'batman-1966',
-    name: 'Batman (1966)',
-    namePt: 'Batman (1966)',
-    wikidata: ['Q92205230'],
-    ids: [
-      'tt0059968', // Batman (1966)
-      'tt0060153', // Batman: The Movie (1966)
     ],
   },
   {
@@ -382,17 +439,13 @@ module.exports = [
     ],
   },
   {
-    key: 'star-wars-legends',
-    name: 'Star Wars Legends',
-    namePt: 'Star Wars Legends (fora do cânone)',
-    wikidata: ['Q3551295'],
+    key: 'batman-1966',
+    name: 'Batman (1966)',
+    namePt: 'Batman (1966)',
+    wikidata: ['Q92205230'],
     ids: [
-      'tt0193524', // The Star Wars Holiday Special (1978)
-      'tt0087225', // The Ewok Adventure (1984)
-      'tt0089110', // Ewoks: The Battle for Endor (1985)
-      'tt0088510', // Star Wars: Droids (1985)
-      'tt0088515', // Star Wars: Ewoks (1985)
-      'tt0361243', // Star Wars: Clone Wars (2003)
+      'tt0059968', // Batman (1966)
+      'tt0060153', // Batman: The Movie (1966)
     ],
   },
   {
@@ -431,14 +484,17 @@ module.exports = [
     ],
   },
   {
-    key: 'star-trek-kelvin',
-    name: 'Kelvin Timeline',
-    namePt: 'Linha temporal Kelvin',
-    wikidata: ['Q47164023'],
+    key: 'star-wars-legends',
+    name: 'Star Wars Legends',
+    namePt: 'Star Wars Legends (fora do cânone)',
+    wikidata: ['Q3551295'],
     ids: [
-      'tt0796366', // Star Trek (2009)
-      'tt1408101', // Star Trek Into Darkness (2013)
-      'tt2660888', // Star Trek Beyond (2016)
+      'tt0193524', // The Star Wars Holiday Special (1978)
+      'tt0087225', // The Ewok Adventure (1984)
+      'tt0089110', // Ewoks: The Battle for Endor (1985)
+      'tt0088510', // Star Wars: Droids (1985)
+      'tt0088515', // Star Wars: Ewoks (1985)
+      'tt0361243', // Star Wars: Clone Wars (2003)
     ],
   },
   {
@@ -472,109 +528,50 @@ module.exports = [
     ],
   },
   {
-    key: 'transformers-g1',
-    name: 'Transformers Generation 1',
-    namePt: 'Transformers Geração 1 (1984)',
+    key: 'star-trek-kelvin',
+    name: 'Kelvin Timeline',
+    namePt: 'Linha temporal Kelvin',
+    wikidata: ['Q47164023'],
     ids: [
-      'tt0086817', // The Transformers (1984)
-      'tt0092106', // The Transformers: The Movie (1986)
+      'tt0796366', // Star Trek (2009)
+      'tt1408101', // Star Trek Into Darkness (2013)
+      'tt2660888', // Star Trek Beyond (2016)
     ],
   },
   {
-    key: 'transformers-bayverse',
-    name: 'Transformers (Michael Bay)',
-    namePt: 'Transformers de Michael Bay',
-    wikidata: ['Q116480347'],
+    key: 'alien-main',
+    name: 'Alien (main saga)',
+    namePt: 'Alien (saga principal)',
+    wikidata: ['Q26996109'],
+    chrono: [
+      'Prometheus',
+      'Alien: Covenant',
+      'Alien: Earth',
+      'Alien (1979)',
+      'Alien: Romulus',
+      'Aliens',
+      'Alien³',
+      'Alien: Resurrection',
+    ],
     ids: [
-      'tt0418279', // Transformers (2007)
-      'tt1055369', // Transformers: Revenge of the Fallen (2009)
-      'tt1399103', // Transformers: Dark of the Moon (2011)
-      'tt2109248', // Transformers: Age of Extinction (2014)
-      'tt3371366', // Transformers: The Last Knight (2017)
+      'tt1446714', // Prometheus (2012)
+      'tt2316204', // Alien: Covenant (2017)
+      'tt13623632', // Alien: Earth (2025)
+      'tt0078748', // Alien (1979)
+      'tt18412256', // Alien: Romulus (2024)
+      'tt0090605', // Aliens (1986)
+      'tt0103644', // Alien³ (1992)
+      'tt0118583', // Alien: Resurrection (1997)
     ],
   },
   {
-    key: 'transformers-bumblebee',
-    name: 'Bumblebee & Rise of the Beasts',
-    namePt: 'Bumblebee e O Despertar das Feras',
+    key: 'alien-vs-predator',
+    name: 'Alien vs. Predator',
+    namePt: 'Alien vs. Predador',
+    wikidata: ['Q2967318', 'Q23016617'],
     ids: [
-      'tt4701182', // Bumblebee (2018)
-      'tt5090568', // Transformers: Rise of the Beasts (2023)
-    ],
-  },
-  {
-    key: 'tmnt-1990',
-    name: 'Teenage Mutant Ninja Turtles (1990–2007 films)',
-    namePt: 'Tartarugas Ninja (filmes 1990–2007)',
-    wikidata: ['Q132392380'],
-    ids: [
-      'tt0100758', // Teenage Mutant Ninja Turtles (1990)
-      'tt0103060', // Teenage Mutant Ninja Turtles II: The Secret of the Ooze (1991)
-      'tt0108308', // Teenage Mutant Ninja Turtles III (1993)
-      'tt0453556', // TMNT (2007)
-    ],
-  },
-  {
-    key: 'tmnt-2014',
-    name: 'Teenage Mutant Ninja Turtles (2014–2016 films)',
-    namePt: 'Tartarugas Ninja (filmes 2014–2016)',
-    wikidata: ['Q136536441'],
-    ids: [
-      'tt1291150', // Teenage Mutant Ninja Turtles (2014)
-      'tt3949660', // Teenage Mutant Ninja Turtles: Out of the Shadows (2016)
-    ],
-  },
-  {
-    key: 'tmnt-rise',
-    name: 'Rise of the Teenage Mutant Ninja Turtles',
-    namePt: 'O Despertar das Tartarugas Ninja',
-    wikidata: ['Q136483440'],
-    ids: [
-      'tt6601082', // Rise of the Teenage Mutant Ninja Turtles (2018)
-      'tt9784708', // Rise of the Teenage Mutant Ninja Turtles: The Movie (2022)
-    ],
-  },
-  {
-    key: 'tmnt-mutant-mayhem',
-    name: 'Mutant Mayhem',
-    namePt: 'Caos Mutante',
-    wikidata: ['Q136536453'],
-    ids: [
-      'tt8589698', // Teenage Mutant Ninja Turtles: Mutant Mayhem (2023)
-      'tt28521741', // Tales of the Teenage Mutant Ninja Turtles (2024)
-    ],
-  },
-  {
-    key: 'apes-original',
-    name: 'Planet of the Apes (1968–1973)',
-    namePt: 'Planeta dos Macacos (1968–1973)',
-    ids: [
-      'tt0063442', // Planet of the Apes (1968)
-      'tt0065462', // Beneath the Planet of the Apes (1970)
-      'tt0067065', // Escape from the Planet of the Apes (1971)
-      'tt0068408', // Conquest of the Planet of the Apes (1972)
-      'tt0069768', // Battle for the Planet of the Apes (1973)
-    ],
-  },
-  {
-    key: 'apes-reboot',
-    name: 'Planet of the Apes (2011–)',
-    namePt: 'Planeta dos Macacos (2011–)',
-    ids: [
-      'tt1318514', // Rise of the Planet of the Apes (2011)
-      'tt2103281', // Dawn of the Planet of the Apes (2014)
-      'tt3450958', // War for the Planet of the Apes (2017)
-      'tt11389872', // Kingdom of the Planet of the Apes (2024)
-    ],
-  },
-  {
-    key: 'dune-legendary',
-    name: 'Dune (Denis Villeneuve)',
-    namePt: 'Duna de Denis Villeneuve',
-    ids: [
-      'tt1160419', // Dune (2021)
-      'tt15239678', // Dune: Part Two (2024)
-      'tt10466872', // Dune: Prophecy (2024)
+      'tt0370263', // AVP: Alien vs. Predator (2004)
+      'tt0758730', // Aliens vs. Predator: Requiem (2007)
     ],
   },
   {
@@ -602,13 +599,109 @@ module.exports = [
     ],
   },
   {
-    key: 'alien-vs-predator',
-    name: 'Alien vs. Predator',
-    namePt: 'Alien vs. Predador',
-    wikidata: ['Q2967318', 'Q23016617'],
+    key: 'dune-legendary',
+    name: 'Dune (Denis Villeneuve)',
+    namePt: 'Duna de Denis Villeneuve',
     ids: [
-      'tt0370263', // AVP: Alien vs. Predator (2004)
-      'tt0758730', // Aliens vs. Predator: Requiem (2007)
+      'tt1160419', // Dune (2021)
+      'tt15239678', // Dune: Part Two (2024)
+      'tt10466872', // Dune: Prophecy (2024)
+    ],
+  },
+  {
+    key: 'transformers-bayverse',
+    name: 'Transformers (Michael Bay)',
+    namePt: 'Transformers de Michael Bay',
+    wikidata: ['Q116480347'],
+    ids: [
+      'tt0418279', // Transformers (2007)
+      'tt1055369', // Transformers: Revenge of the Fallen (2009)
+      'tt1399103', // Transformers: Dark of the Moon (2011)
+      'tt2109248', // Transformers: Age of Extinction (2014)
+      'tt3371366', // Transformers: The Last Knight (2017)
+    ],
+  },
+  {
+    key: 'transformers-bumblebee',
+    name: 'Bumblebee & Rise of the Beasts',
+    namePt: 'Bumblebee e O Despertar das Feras',
+    ids: [
+      'tt4701182', // Bumblebee (2018)
+      'tt5090568', // Transformers: Rise of the Beasts (2023)
+    ],
+  },
+  {
+    key: 'transformers-g1',
+    name: 'Transformers Generation 1',
+    namePt: 'Transformers Geração 1 (1984)',
+    ids: [
+      'tt0086817', // The Transformers (1984)
+      'tt0092106', // The Transformers: The Movie (1986)
+    ],
+  },
+  {
+    key: 'apes-reboot',
+    name: 'Planet of the Apes (2011–)',
+    namePt: 'Planeta dos Macacos (2011–)',
+    ids: [
+      'tt1318514', // Rise of the Planet of the Apes (2011)
+      'tt2103281', // Dawn of the Planet of the Apes (2014)
+      'tt3450958', // War for the Planet of the Apes (2017)
+      'tt11389872', // Kingdom of the Planet of the Apes (2024)
+    ],
+  },
+  {
+    key: 'apes-original',
+    name: 'Planet of the Apes (1968–1973)',
+    namePt: 'Planeta dos Macacos (1968–1973)',
+    ids: [
+      'tt0063442', // Planet of the Apes (1968)
+      'tt0065462', // Beneath the Planet of the Apes (1970)
+      'tt0067065', // Escape from the Planet of the Apes (1971)
+      'tt0068408', // Conquest of the Planet of the Apes (1972)
+      'tt0069768', // Battle for the Planet of the Apes (1973)
+    ],
+  },
+  {
+    key: 'tmnt-mutant-mayhem',
+    name: 'Mutant Mayhem',
+    namePt: 'Caos Mutante',
+    wikidata: ['Q136536453'],
+    ids: [
+      'tt8589698', // Teenage Mutant Ninja Turtles: Mutant Mayhem (2023)
+      'tt28521741', // Tales of the Teenage Mutant Ninja Turtles (2024)
+    ],
+  },
+  {
+    key: 'tmnt-rise',
+    name: 'Rise of the Teenage Mutant Ninja Turtles',
+    namePt: 'O Despertar das Tartarugas Ninja',
+    wikidata: ['Q136483440'],
+    ids: [
+      'tt6601082', // Rise of the Teenage Mutant Ninja Turtles (2018)
+      'tt9784708', // Rise of the Teenage Mutant Ninja Turtles: The Movie (2022)
+    ],
+  },
+  {
+    key: 'tmnt-2014',
+    name: 'Teenage Mutant Ninja Turtles (2014–2016 films)',
+    namePt: 'Tartarugas Ninja (filmes 2014–2016)',
+    wikidata: ['Q136536441'],
+    ids: [
+      'tt1291150', // Teenage Mutant Ninja Turtles (2014)
+      'tt3949660', // Teenage Mutant Ninja Turtles: Out of the Shadows (2016)
+    ],
+  },
+  {
+    key: 'tmnt-1990',
+    name: 'Teenage Mutant Ninja Turtles (1990–2007 films)',
+    namePt: 'Tartarugas Ninja (filmes 1990–2007)',
+    wikidata: ['Q132392380'],
+    ids: [
+      'tt0100758', // Teenage Mutant Ninja Turtles (1990)
+      'tt0103060', // Teenage Mutant Ninja Turtles II: The Secret of the Ooze (1991)
+      'tt0108308', // Teenage Mutant Ninja Turtles III (1993)
+      'tt0453556', // TMNT (2007)
     ],
   },
   {

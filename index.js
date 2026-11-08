@@ -7,7 +7,7 @@ const { renderConfigurePage, LOGO_SVG } = require('./lib/configure-page');
 
 const PORT = Number(process.env.PORT) || 7010;
 const HOST = '0.0.0.0';
-const VERSION = '1.5.0';
+const VERSION = '1.6.0';
 const PAGE_SIZE = 100;
 const SAGA_CATALOG_PREFIX = 'saga_';
 const TABS = ['sagas', 'animation'];
@@ -163,7 +163,8 @@ function getCatalogItems(catalogId, extra) {
   if (!catalogId.startsWith(SAGA_CATALOG_PREFIX)) return null;
   const saga = SAGA_BY_KEY.get(catalogId.slice(SAGA_CATALOG_PREFIX.length));
   if (!saga) return null;
-  const key = viewKeyFromLabel(extra.genre) || 'default';
+  // Sem vista escolhida (ex.: filas do ecrã inicial), mostra a primeira da saga (ex.: o MCU na Marvel).
+  const key = viewKeyFromLabel(extra.genre) || availableViews(saga)[0] || 'default';
   return viewItems(saga, key);
 }
 
