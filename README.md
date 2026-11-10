@@ -53,7 +53,29 @@ npm start
 - Configurar: `http://127.0.0.1:7010/configure`
 - Manifest: `http://127.0.0.1:7010/manifest.json`
 
-Para instalar no telemóvel ou na TV, publica na Vercel (as apps precisam de `https`).
+Para instalar no telemóvel ou na TV, publica no Fly.io ou na Vercel (as apps precisam de `https`).
+
+## Publicar no Fly.io
+
+O Fly.io corre o addon como um servidor normal (contentor Docker). Ficheiros: `Dockerfile`, `fly.toml`, `.dockerignore` (não precisas de Docker instalado: o Fly constrói a imagem).
+
+1. Instala o `flyctl` (PowerShell):
+   ```powershell
+   iwr https://fly.io/install.ps1 -useb | iex
+   ```
+2. Inicia sessão: `fly auth login`
+3. Dentro desta pasta, cria a app (usa o `fly.toml` que já existe; troca o nome se `sagas-colecoes` estiver ocupado):
+   ```
+   fly launch --no-deploy --copy-config --name <nome-unico>
+   ```
+4. Publica: `fly deploy`
+5. Abre `https://<nome-unico>.fly.dev/configure`, escolhe o idioma e as sagas, e instala.
+
+Notas:
+- A máquina desliga-se quando ninguém a usa e liga sozinha no pedido seguinte (o primeiro pedido demora uns segundos). Para a ter sempre ligada: `auto_stop_machines = "off"` e `min_machines_running = 1` no `fly.toml`.
+- Os dados vão dentro da imagem. Depois de mudares sagas ou de correres `npm run update` à mão, publica outra vez com `fly deploy`.
+- **Atualização diária no Fly.io:** com o addon no GitHub, cria um token com `fly tokens create deploy` e guarda-o em Settings → Secrets and variables → Actions com o nome `FLY_API_TOKEN`. O workflow diário faz `fly deploy` sozinho quando houver novidades. Sem esse segredo, só grava no GitHub (que chega para a Vercel).
+- As próximas estreias que chegam à data passam sozinhas para a saga, sem precisar de nova publicação.
 
 ## Publicar na Vercel
 
