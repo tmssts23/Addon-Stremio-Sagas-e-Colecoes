@@ -1,35 +1,36 @@
-# Fly.io — https://fly.io/docs/reference/configuration/
-# Muda "app" para um nome único teu (ou deixa o `fly launch` escolher).
-app = "sagas-colecoes"
-primary_region = "mad"   # Madrid, o mais perto de Portugal
+# fly.toml app configuration file generated for addon-stremio-sagas-e-colecoes on 2026-11-10T13:32:13Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'addon-stremio-sagas-e-colecoes'
+primary_region = 'ams'
 
 [build]
-  dockerfile = "Dockerfile"
+  dockerfile = 'Dockerfile'
 
 [env]
-  PORT = "8080"
+  PORT = '8080'
 
 [http_service]
   internal_port = 8080
   force_https = true
-  # Desliga a máquina quando ninguém usa (poupa dinheiro) e liga sozinha no próximo pedido.
-  # Mete auto_stop_machines = "off" e min_machines_running = 1 se a quiseres sempre ligada.
-  auto_stop_machines = "stop"
+  auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
 
   [http_service.concurrency]
-    type = "connections"
-    soft_limit = 100
+    type = 'connections'
     hard_limit = 200
+    soft_limit = 100
 
   [[http_service.checks]]
-    method = "GET"
-    path = "/manifest.json"
-    interval = "30s"
-    timeout = "5s"
-    grace_period = "10s"
+    interval = '30s'
+    timeout = '5s'
+    grace_period = '10s'
+    method = 'GET'
+    path = '/manifest.json'
 
 [[vm]]
-  size = "shared-cpu-1x"
-  memory = "256mb"
+  size = 'shared-cpu-1x'
+  memory = '256mb'
