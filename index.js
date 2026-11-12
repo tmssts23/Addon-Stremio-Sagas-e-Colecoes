@@ -1,12 +1,8 @@
-const http = require('http');
-
 const SAGAS = require('./lib/sagas');
 const { viewItems, availableViews, viewLabel, viewKeyFromLabel } = require('./lib/views');
 const { strings, sagaName, resolveLang } = require('./lib/i18n');
 const { renderConfigurePage, LOGO_SVG } = require('./lib/configure-page');
 
-const PORT = Number(process.env.PORT) || 7010;
-const HOST = '0.0.0.0';
 const VERSION = '1.6.0';
 const PAGE_SIZE = 100;
 const SAGA_CATALOG_PREFIX = 'saga_';
@@ -23,6 +19,8 @@ const CORS = {
 };
 
 const SAGA_BY_KEY = new Map(SAGAS.map((saga) => [saga.key, saga]));
+// As vistas de cada saga calculam-se uma vez, no arranque (o manifest fica rápido logo no primeiro pedido).
+const SAGA_VIEWS = new Map(SAGAS.map((saga) => [saga.key, availableViews(saga)]));
 
 function normalize(text) {
   return String(text || '')
@@ -43,10 +41,17 @@ function safeDecode(raw) {
 
 // As próximas estreias mostram a data completa (ex.: "18/12/2026"); o resto, só o ano. Datas só com o ano
 // ("2027") ou a 1 de janeiro (o Wikidata usa-o quando só sabe o ano) mostram só o ano.
+// Os formatadores criam-se uma vez, no arranque (criá-los em cada pedido é lento).
+const DATE_FORMATS = {
+  pt: new Intl.DateTimeFormat('pt-PT', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }),
+  en: new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }),
+};
+DATE_FORMATS.pt.format(new Date(0));
+DATE_FORMATS.en.format(new Date(0));
+
 function releaseInfo(item, lang) {
   if (!item.date || item.date.length === 4 || item.date.endsWith('-01-01')) return String(item.year);
-  const date = new Date(`${item.date}T12:00:00Z`);
-  return new Intl.DateTimeFormat(lang === 'pt' ? 'pt-PT' : 'en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(date);
+  return (DATE_FORMATS[lang] || DATE_FORMATS.en).format(new Date(`${item.date}T12:00:00Z`));
 }
 
 function toMeta(item, lang) {
@@ -98,7 +103,7 @@ function parseConfig(raw) {
 // os catálogos sem extras obrigatórios, e no Explorar escolhem logo a primeira opção ("Predefinida").
 function sagaCatalog(saga, lang, onHome) {
   const text = strings(lang);
-  const options = availableViews(saga).map((key) => viewLabel(key, lang));
+  const options = SAGA_VIEWS.get(saga.key).map((key) => viewLabel(key, lang));
   return {
     type: text.types[saga.tab],
     id: `${SAGA_CATALOG_PREFIX}${saga.key}`,
@@ -149,10 +154,10 @@ function searchItems(query, tab) {
   for (const saga of SAGAS.filter((s) => s.tab === tab)) {
     const sagaTerms = [saga.name, saga.namePt, ...(saga.aliases || [])].map(normalize);
     if (sagaTerms.some((term) => term.includes(needle))) {
-      results.push(...viewItems(saga, 'release'));
+      results.push(...viewItems(saga, 'all'));
       continue;
     }
-    results.push(...viewItems(saga, 'release').filter((item) => normalize(item.name).includes(needle)));
+    results.push(...viewItems(saga, 'all').filter((item) => normalize(item.name).includes(needle)));
   }
   return uniqueItems(results);
 }
@@ -164,7 +169,7 @@ function getCatalogItems(catalogId, extra) {
   const saga = SAGA_BY_KEY.get(catalogId.slice(SAGA_CATALOG_PREFIX.length));
   if (!saga) return null;
   // Sem vista escolhida (ex.: filas do ecrã inicial), mostra a primeira da saga (ex.: o MCU na Marvel).
-  const key = viewKeyFromLabel(extra.genre) || availableViews(saga)[0] || 'default';
+  const key = viewKeyFromLabel(extra.genre) || SAGA_VIEWS.get(saga.key)[0] || 'default';
   return viewItems(saga, key);
 }
 
@@ -195,13 +200,28 @@ function notFound(res) {
 }
 
 function originFromRequest(req) {
-  const host = req.headers.host || `127.0.0.1:${PORT}`;
+  const host = req.headers.host || 'localhost';
   const proto = String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim() === 'https' ? 'https' : 'http';
   return `${proto}://${host}`;
 }
 
+// O manifest só muda com a configuração, a língua e o endereço: guarda-se em memória para os pedidos
+// seguintes (no Cloudflare Workers cada pedido só tem 10 ms de processador).
+const MANIFEST_CACHE = new Map();
+function cachedManifest(rawConfig, config, lang, origin) {
+  const key = `${rawConfig || ''}|${lang}|${origin}`;
+  if (!MANIFEST_CACHE.has(key)) {
+    if (MANIFEST_CACHE.size > 200) MANIFEST_CACHE.clear();
+    MANIFEST_CACHE.set(key, JSON.stringify(getManifest(config, lang, origin)));
+  }
+  return MANIFEST_CACHE.get(key);
+}
+
+// Regista os pedidos só no servidor Node (não na Vercel nem no Cloudflare Workers, que não têm `process`).
+const LOG_REQUESTS = typeof process !== 'undefined' && Boolean(process.env) && !process.env.VERCEL;
+
 function requestHandler(req, res) {
-  if (!process.env.VERCEL) {
+  if (LOG_REQUESTS) {
     console.log(`[Sagas] ${req.method} ${req.url} | accept-language: ${req.headers['accept-language'] || '-'}`);
   }
 
@@ -235,7 +255,8 @@ function requestHandler(req, res) {
 
   if (segments.length === 1 && segments[0] === 'manifest.json') {
     const lang = resolveLang(config, req.headers['accept-language']);
-    return sendJson(res, getManifest(config, lang, origin), 60 * 60, { Vary: 'Accept-Language' });
+    const body = cachedManifest(rawConfig, config, lang, origin);
+    return send(res, 200, body, 'application/json; charset=utf-8', 60 * 60, { Vary: 'Accept-Language' });
   }
 
   // /catalog/<tipo>/<id>.json ou /catalog/<tipo>/<id>/<extra>.json (o tipo muda com a língua)
@@ -258,11 +279,6 @@ function requestHandler(req, res) {
   return notFound(res);
 }
 
+// O addon em si, sem servidor: server.js (Node/Fly.io), api/index.js (Vercel) e worker.mjs (Cloudflare
+// Workers) usam este requestHandler.
 module.exports = { requestHandler, getManifest, getCatalogItems, parseConfig };
-
-if (require.main === module) {
-  http.createServer(requestHandler).listen(PORT, HOST, () => {
-    console.log(`[Sagas] A correr em http://127.0.0.1:${PORT}/manifest.json`);
-    console.log(`[Sagas] Configurar em http://127.0.0.1:${PORT}/configure`);
-  });
-}

@@ -53,7 +53,27 @@ npm start
 - Configurar: `http://127.0.0.1:7010/configure`
 - Manifest: `http://127.0.0.1:7010/manifest.json`
 
-Para instalar no telemóvel ou na TV, publica no Fly.io ou na Vercel (as apps precisam de `https`).
+Para instalar no telemóvel ou na TV, publica no Cloudflare Workers, no Fly.io ou na Vercel (as apps precisam de `https`).
+
+O código do addon está em `index.js`; cada sítio tem a sua entrada: `server.js` (Node e Fly.io), `worker.mjs` (Cloudflare Workers) e `api/index.js` (Vercel).
+
+## Enviar para o GitHub
+
+O addon tem cerca de 30 ficheiros, por isso cabe num só envio pela página do GitHub (o limite é 100 ficheiros de cada vez): no repositório, **Add file → Upload files** e arrasta o conteúdo desta pasta, incluindo a pasta `.github` (tem a atualização diária). Não envies `node_modules` nem `.wrangler`, se existirem.
+
+## Publicar no Cloudflare Workers (recomendado)
+
+Grátis e sempre ligado, sem máquinas para acordar. Ficheiros: `worker.mjs` e `wrangler.toml`. Precisas do Node instalado (não é preciso `npm install`).
+
+1. Inicia sessão no Cloudflare: `npx wrangler login`
+2. Dentro desta pasta, publica: `npx wrangler deploy` (troca `name` em `wrangler.toml` se quiseres outro nome)
+3. Abre `https://sagas-colecoes.<a-tua-conta>.workers.dev/configure`, escolhe o idioma e as sagas, e instala.
+
+Notas:
+- O Wrangler junta o código e os dados num só ficheiro (cerca de 160 KB). Cada pedido gasta poucos milissegundos, dentro do limite gratuito do Workers.
+- Os dados vão dentro do que é publicado. Depois de mudares sagas ou de correres `npm run update` à mão, publica outra vez com `npx wrangler deploy`.
+- **Atualização diária no Cloudflare:** com o addon no GitHub, cria um token em dash.cloudflare.com → My Profile → API Tokens, com o modelo **Edit Cloudflare Workers**, e guarda-o em Settings → Secrets and variables → Actions com o nome `CLOUDFLARE_API_TOKEN` (e o ID da conta, que aparece no painel do Cloudflare, como `CLOUDFLARE_ACCOUNT_ID`). O workflow diário publica sozinho quando houver novidades.
+- As próximas estreias que chegam à data passam sozinhas para a saga, sem precisar de nova publicação.
 
 ## Publicar no Fly.io
 

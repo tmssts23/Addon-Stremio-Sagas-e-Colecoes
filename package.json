@@ -4,8 +4,8 @@
   "description": "Addon de catalogos de sagas e colecoes para Stremio e Nuvio",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node index.js",
+    "start": "node server.js",
+    "dev": "node server.js",
     "verify": "node tools/verify-ids.js",
     "update": "node tools/update.js",
     "popularity": "node tools/popularity.js"

@@ -7,10 +7,10 @@ ENV NODE_ENV=production \
 
 WORKDIR /app
 COPY package.json ./
-COPY index.js ./
+COPY index.js server.js ./
 COPY lib ./lib
 COPY data ./data
 
 USER node
 EXPOSE 8080
-CMD ["node", "index.js"]
+CMD ["node", "server.js"]
